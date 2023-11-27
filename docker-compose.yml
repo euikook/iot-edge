@@ -8,7 +8,7 @@ services:
       - "1883:1883"
       - "9001:9001"
     volumes:
-      - ./conf/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./conf/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
       - .data/logs/mosquitto/:/mosquitto/log/
       - iot-edge-mosquitto:/mosquitto/data/
     networks:
@@ -50,23 +50,20 @@ services:
     container_name: grafana
     image: grafana/grafana
     restart: always
-    user: "0"
     ports:
       - "3000:3000"
     volumes:
-      - ./conf/grafana.ini:/etc/grafana/grafana.ini
       - iot-edge-grafana-data:/var/lib/grafana
-      - .data/logs/grafana:/var/log/grafana
+      - .data/grafana/provisioning:/etc/grafana/provisioning
     depends_on:
       - influxdb
     networks:
       - iot-edge
 
 
-
-
 networks:
   iot-edge:
+    name: iot-edge
 
 volumes:
   iot-edge-mosquitto:
